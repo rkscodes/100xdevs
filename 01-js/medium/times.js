@@ -9,5 +9,16 @@ There is no automated test for this one, this is more for you to understand time
 */
 
 function calculateTime(n) {
-    return 0.01;
+    let res = 0;
+    let start = Date.now();
+    for (let i = 1; i <= n; i++) {
+        res += i
+    }
+    let end = Date.now();
+    return (end - start);
 }
+
+console.log(calculateTime(100));
+console.log(calculateTime(10000));
+console.log(calculateTime(100000));
+console.log(calculateTime(100000000));
