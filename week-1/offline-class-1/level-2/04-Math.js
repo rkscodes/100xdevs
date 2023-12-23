@@ -22,6 +22,9 @@ function mathMethods(value) {
   let powerOfTwo = Math.pow(value, 2);
   console.log("After pow():", powerOfTwo);
 
+  let powerOfTwo0 = Math.pow(value, 1 / 2);
+  console.log("After pow sqrt():", powerOfTwo0);
+
   let squareRoot = Math.sqrt(value);
   console.log("After sqrt():", squareRoot);
 }

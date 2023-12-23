@@ -1,6 +1,7 @@
 function dateMethods() {
   const currentDate = new Date();
   console.log("Current Date:", currentDate);
+  console.log("In milliseconds:", currentDate.getTime())
 
   // Getting various components of the date
   console.log("Date:", currentDate.getDate());
