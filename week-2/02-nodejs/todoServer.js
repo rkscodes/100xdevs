@@ -39,11 +39,65 @@
 
   Testing the server - run `npm run test-todoServer` command in terminal
  */
-  const express = require('express');
-  const bodyParser = require('body-parser');
-  
-  const app = express();
-  
-  app.use(bodyParser.json());
-  
-  module.exports = app;
+const express = require('express');
+const bodyParser = require('body-parser');
+const morgan = require('morgan')
+
+const app = express();
+const port = 3000
+let todos = []
+
+app.use(bodyParser.json());
+app.use(morgan('tiny'))
+
+
+app.get('/todos', (req, res) => {
+  res.status(200).json(todos)
+})
+
+app.post('/todos', (req, res) => {
+  const newTodo = {
+    id: Math.floor(Math.random() * 1000000),
+    title: req.body.title,
+    description: req.body.description,
+    completed: req.body.completed | false
+  }
+  todos.push(newTodo)
+  res.status(201).json(newTodo)
+})
+
+app.get('/todos/:id', (req, res) => {
+  const id = parseInt(req.params.id)
+  const todo = todos.find(t => t.id == id)
+  if (!todo) {
+    res.status(404)
+  }
+  res.json(todo)
+})
+app.put('/todos/:id', (req, res) => {
+  const todoIndex = todos.findIndex(t => t.id === parseInt(req.params.id))
+  if (todoIndex === -1)
+    return res.status(404)
+
+  if (req.body.title)
+    todos[todoIndex].title = req.body.title
+  if (req.body.description)
+    todos[todoIndex].description = req.body.description
+  if (req.body.completed)
+    todos[todoIndex].completed = req.body.completed
+
+  res.send(todos[todoIndex])
+})
+
+app.delete('/todos/:id', (req, res) => {
+  const todoIndex = todos.findIndex(t => t.id === parseInt(req.params.id));
+  if (todoIndex === -1) {
+    res.status(404).send();
+  } else {
+    todos.splice(todoIndex, 1);
+    res.status(200).send();
+  }
+});
+
+app.listen(port)
+module.exports = app;
