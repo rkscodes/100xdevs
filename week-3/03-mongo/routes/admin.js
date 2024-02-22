@@ -20,6 +20,9 @@ courseScheam = z.object({
 })
 
 // Admin Routes
+router.get('/', (req, res) => {
+    res.json({ msg: 'Welcome' })
+})
 router.post('/signup', (req, res) => {
     // Implement admin signup logic
     const username = req.body.username
