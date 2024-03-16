@@ -1,0 +1,33 @@
+<html>
+
+<head>
+
+</head>
+<script>
+	function markedDone(id) {
+		const element = document.getElementById(id);
+		element.innerHTML = "Done";
+	}
+
+	function addTodo() {
+		const title = document.getElementById('title').value;
+		const description = document.getElementById('description').value;
+		const div = document.getElementById('container');
+		const ele = `
+        <div>
+            <div>${title}: ${description}</div> 
+            <button id="${title}" onclick="markedDone('${title}')">Mark as done</button>
+        </div>
+        `;
+		div.insertAdjacentHTML('beforeend', ele);
+	}
+</script>
+
+<body>
+	<input id="title" type="text" placeholder="title"><br>
+	<input id="description" type="text" placeholder="description"><br>
+	<Button onclick="addTodo()">Add Todo</Button>
+	<div id="container"></div>
+</body>
+
+</html>

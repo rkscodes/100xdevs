@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<script>
+		let timeoutID
+		function debouncedPopulateDiv() {
+			clearTimeout(timeoutID)
+			timeoutID = setTimeout(() => populateDiv(), 1000)
+		}
+		async function populateDiv() {
+			const a = document.getElementById('first').value
+			const b = document.getElementById('second').value
+			const ele = document.getElementById('finalSum')
+			// console.log(ele)
+			try {
+				const res = await fetch(`https://sum-server.100xdevs.com/sum?a=${a}&b=${b}`)
+				const text = await res.text()
+				ele.innerHTML = `Sum is: ${text}`
+			} catch (err) {
+				ele.innerHTML = 'Some issue with the backend'
+			}
+
+		}	
+	</script>
+</head>
+
+<body>
+	<input oninput="debouncedPopulateDiv()" id="first" type="text">
+	<input oninput="debouncedPopulateDiv()" id="second" type="text"> <br>
+	<!-- <input id="third" type="third"> <br> -->
+	<button onclick="populateDiv()">Calculate</button>
+	<div id="finalSum"></div>
+</body>
+
+</html>
