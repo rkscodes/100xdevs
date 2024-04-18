@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+// const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 
 mongoose.connect('mongodb+srv://ram:UYdG8iRrhzKD71gB@cluster0.l7kjezl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 
@@ -10,9 +11,7 @@ const userSchema = new mongoose.Schema({
 })
 
 
-const User = mongoose.model(UserSchema)
+const User = mongoose.model('User', userSchema)
 
 
-module.exports = {
-    User
-};
+export {User}
