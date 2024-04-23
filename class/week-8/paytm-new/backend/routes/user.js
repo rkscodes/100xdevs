@@ -3,6 +3,7 @@ import zod from 'zod'
 import {User} from '../db.js'
 import jwt from 'jsonwebtoken'
 import { JWT_SECRET } from '../config.js'
+import { authMiddleWare } from '../middleware.js'
 
 const userRouter = express.Router()
 
@@ -17,6 +18,11 @@ const  userSchema = zod.object({
     lastName : zod.string()
 }) 
 
+const updateUser = zod.object({
+    password: zod.string().min(4, {message: 'This field should be atleast 4 letters'}).optional(),
+    firstName: zod.string().optional(),
+    lastName: zod.string().optional()
+})
 
 userRouter.post('/signup', async (req,res)=>{
     const body = req.body;
@@ -53,6 +59,48 @@ userRouter.post('/signup', async (req,res)=>{
         res.status(300).send('User creation failed/ try again')
     }
 
+})
+
+userRouter.put('/', authMiddleWare, async (req, res)=>{
+    const {success, error} = zod.safeparse(req.body);
+
+    if(error){
+        res.status(411).json({
+            message : error
+        })
+    }
+
+    await User.updateOne({_id : req.userID}, req.body)
+    res.json({
+        message: 'Updated successfully'
+    })
+})
+
+userRouter.get('/bulk', authMiddleWare, (req, res)=>{
+    const filter = req.query.filter || '';
+
+    const users = await User.find({
+        "$or": [
+            {
+                firstName {
+                    "$regex" : filter
+                }
+            }, 
+            {
+                lastName {
+                    "$regex" : filter
+                }
+            }
+        ]
+    })
+    res.json({
+        user : users.map(user => ({
+            username : user.username, 
+            firstName : user.firstName, 
+            lastName: user.lastName, 
+            _id : user._id
+        }))
+    })
 })
 
 export {userRouter} 
