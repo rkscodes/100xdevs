@@ -31,8 +31,8 @@ app.post('/api/v1/signup', async (c) => {
   }
 })
 
-app.post('/api/v1/signin', (c) => {
-  return c.text('signin route')
+app.post('/api/v1/signin', async (c) => {
+  const prisma = new PrismaClient
 })
 
 app.get('/api/v1/blog/:id', (c) => {
